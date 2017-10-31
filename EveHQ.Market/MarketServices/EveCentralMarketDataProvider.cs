@@ -143,7 +143,7 @@ namespace EveHQ.Market.MarketServices
         /// <summary>Gets the name.</summary>
         public static string Name
         {
-            get { return "Eve-Central (Live Queries)"; }
+            get { return "Eve-Central (not working, 10.2017)"; }
         }
 
         /// <summary>Gets a value indicating whether is enabled.</summary>
@@ -319,19 +319,19 @@ namespace EveHQ.Market.MarketServices
         /// <returns>The <see cref="Task" />.</returns>
         /// <exception cref="Exception">Thrown when there's an XML exception</exception>
         /// <exception cref="InvalidOperationException">Thrown when there was a problem with the web request.</exception>
-        public Task<IEnumerable<ItemOrderStats>> GetOrderStats(
+        public Task<IEnumerable<Market.ItemOrderStats>> GetOrderStats(
             IEnumerable<int> typeIds, 
             IEnumerable<int> includeRegions,
             int? systemId, 
             int minQuantity)
         {
-            return Task<IEnumerable<ItemOrderStats>>.Factory.TryRun(
+            return Task<IEnumerable<Market.ItemOrderStats>>.Factory.TryRun(
                 () =>
                 {
-                    var cachedItems = new List<ItemOrderStats>();
+                    var cachedItems = new List<Market.ItemOrderStats>();
                     var typesToRequest = new List<int>();
                     string cacheKey;
-                    var dirtyCache = new Dictionary<int, ItemOrderStats>();
+                    var dirtyCache = new Dictionary<int, Market.ItemOrderStats>();
                     includeRegions = includeRegions ?? new List<int>();
                     IList<int> regionList = includeRegions as IList<int> ?? includeRegions.ToList();
                     if (includeRegions != null)
@@ -358,8 +358,8 @@ namespace EveHQ.Market.MarketServices
 
                     foreach (int typeId in typeIds.Distinct())
                     {
-                        CacheItem<ItemOrderStats> itemStats =
-                            _regionDataCache.Get<ItemOrderStats>(ItemKeyFormat.FormatInvariant(typeId, cacheKey));
+                        CacheItem<Market.ItemOrderStats> itemStats =
+                            _regionDataCache.Get<Market.ItemOrderStats>(ItemKeyFormat.FormatInvariant(typeId, cacheKey));
                         if (itemStats != null && itemStats.Data != null && !itemStats.IsDirty)
                         {
                             cachedItems.Add(itemStats.Data);
@@ -571,9 +571,9 @@ namespace EveHQ.Market.MarketServices
         /// <summary>The get order stats from xml.</summary>
         /// <param name="stream">The stream.</param>
         /// <returns>The collection of item order stats.</returns>
-        private static IEnumerable<ItemOrderStats> GetOrderStatsFromXml(Stream stream)
+        private static IEnumerable<Market.ItemOrderStats> GetOrderStatsFromXml(Stream stream)
         {
-            IEnumerable<ItemOrderStats> orderStats = null;
+            IEnumerable<Market.ItemOrderStats> orderStats = null;
             using (TextReader reader = new StreamReader(stream))
             {
                 // ReSharper disable PossibleNullReferenceException
@@ -584,7 +584,7 @@ namespace EveHQ.Market.MarketServices
                 }
                 catch (Exception e)
                 {
-                    orderStats = new List<ItemOrderStats>();
+                    orderStats = new List<Market.ItemOrderStats>();
                     return orderStats;
 
                 }
@@ -596,7 +596,7 @@ namespace EveHQ.Market.MarketServices
                         let buyData = GetOrderData(type.Element("buy"))
                         let sellData = GetOrderData(type.Element("sell"))
                         let allData = GetOrderData(type.Element("all"))
-                        select new ItemOrderStats { ItemTypeId = typeId, Buy = buyData, Sell = sellData, All = allData };
+                        select new Market.ItemOrderStats { ItemTypeId = typeId, Buy = buyData, Sell = sellData, All = allData };
                 }
 
                 // ReSharper restore PossibleNullReferenceException
@@ -612,14 +612,14 @@ namespace EveHQ.Market.MarketServices
         /// <param name="minQuantity">The min quantity.</param>
         /// <param name="cacheKey">The cache key.</param>
         /// <returns>The <see cref="IEnumerable" />.</returns>
-        private IEnumerable<ItemOrderStats> RetrieveItems(
+        private IEnumerable<Market.ItemOrderStats> RetrieveItems(
             List<int> typesToRequest, 
             IEnumerable<int> includeRegions,
             int systemId, 
             int minQuantity, 
             string cacheKey)
         {
-            var resultItems = new List<ItemOrderStats>();
+            var resultItems = new List<Market.ItemOrderStats>();
 
 	        if (!_isServiceAvailable)
 	        {
@@ -637,7 +637,7 @@ namespace EveHQ.Market.MarketServices
                 _requestProvider.PostAsync(new Uri(EveCentralBaseUrl + MarketStatApi), requestParameters);
 
 	        requestTask.Wait(); // wait for the completion (we're in a background task anyways)
-	        if (!requestTask.Result.IsSuccessStatusCode || WebServiceExceptionHelper.IsServiceUnabailableError(requestTask.Exception))
+	        if (!requestTask.Result.IsSuccessStatusCode || WebServiceExceptionHelper.IsServiceUnavailableError(requestTask.Exception))
 	        {
 		        _isServiceAvailable = false;
 				return resultItems;
@@ -654,10 +654,10 @@ namespace EveHQ.Market.MarketServices
                     try
                     {
                         // process result
-                        IEnumerable<ItemOrderStats> retrievedItems = GetOrderStatsFromXml(stream);
+                        IEnumerable<Market.ItemOrderStats> retrievedItems = GetOrderStatsFromXml(stream);
 
                         // cache it.
-                        foreach (ItemOrderStats item in retrievedItems)
+                        foreach (Market.ItemOrderStats item in retrievedItems)
                         {
                             _regionDataCache.Add(
                                 ItemKeyFormat.FormatInvariant(item.ItemTypeId, cacheKey), 

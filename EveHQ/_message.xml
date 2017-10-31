@@ -1,8 +1,8 @@
 ﻿<eveHQMessage>
-	<lastUpdated>24/09/2017 00:00:00</lastUpdated>
+	<lastUpdated>20/10/2017 00:00:00</lastUpdated>
 	<title>Fixes for Prism</title>
 	<allowIgnore>1</allowIgnore>
-	<message><![CDATA[<b>Fixes for Prism and SDE update</b><br/><br/>More info on <a href="https://github.com/EveHQ-Team/EveHQ/wiki/Release-notes" title="Relese notes"><b>Relese notes</b></a> page.<br/><br/>Please report bugs on our <a href="http://evehq.co/forum/" title="Forum"><b>Forum</b></a>(bugs reports section) or better on our GitHub project's <a href="https://github.com/EveHQ-Team/EveHQ/issues" title="issue tracker"><b>issue tracker</b></a><br/><br/>Join us on:<a href="https://twitter.com/EveHQOfficial" title="Twitter"><b>Twitter</b></a>|<a href="https://www.facebook.com/pages/EveHQ/846633492024781" title="Facebook"><b>Facebook</b></a>|<a href="http://evehq.co" title="Website"><b>Website</b></a>]]></message>
+	<message><![CDATA[<b>New default market orders provider Fuzzwork</b><br/><br/>More info on <a href="https://github.com/EveHQ-Team/EveHQ/wiki/Release-notes" title="Relese notes"><b>Relese notes</b></a> page.<br/><br/>Please report bugs on our <a href="http://evehq.co/forum/" title="Forum"><b>Forum</b></a>(bugs reports section) or better on our GitHub project's <a href="https://github.com/EveHQ-Team/EveHQ/issues" title="issue tracker"><b>issue tracker</b></a><br/><br/>Join us on:<a href="https://twitter.com/EveHQOfficial" title="Twitter"><b>Twitter</b></a>|<a href="https://www.facebook.com/pages/EveHQ/846633492024781" title="Facebook"><b>Facebook</b></a>|<a href="http://evehq.co" title="Website"><b>Website</b></a>]]></message>
 	<disabledPlugins>
 		<plugin name="PoS Manager" version="2.8.1.3869"/>
 		<plugin name="EveHQ Route Map" version="2.4.0.3671"/>

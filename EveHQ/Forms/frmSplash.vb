@@ -396,15 +396,6 @@ Namespace Forms
             CustomDataFunctions.LoadCustomPricesFromDB()
             HQ.WriteLogEvent("End: Load custom prices")
 
-            ' Check if we need to start the market watcher
-            HQ.WriteLogEvent("Start: Enable Market Data Uploader")
-            If HQ.Settings.MarketDataUploadEnabled = True Then
-                HQ.MarketCacheUploader.Start()
-            Else
-                HQ.MarketCacheUploader.Stop() ' It should be stopped already, but never hurts to set it so again.
-            End If
-            HQ.WriteLogEvent("End: Enable Market Data Uploader")
-
             ' Show the main form
             HQ.WriteLogEvent("Start: Initialise main form")
             lblStatus.Text = "> Initialising EveHQ..."

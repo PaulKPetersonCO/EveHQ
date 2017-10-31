@@ -36,7 +36,7 @@ VIAddVersionKey "ProductName" "EveHQ Setup"
 !ifdef Version
 VIProductVersion ${Version}
 !else
-VIProductVersion 2.31.8.0
+VIProductVersion 2.31.9.0
 !endif
 
 
@@ -129,6 +129,8 @@ SectionIn RO
   File "..\BuildOutput\EveHQ\Release\EveHQ.SettingsConverter.exe"
   File "..\BuildOutput\EveHQ\Release\EveHQ.SettingsConverter.pdb"
   File "..\BuildOutput\EveHQ\Release\System.Data.SQLite.dll"
+  File "..\BuildOutput\EveHQ\Release\System.Data.SQLite.EF6.dll"
+  File "..\BuildOutput\EveHQ\Release\System.Data.SQLite.Linq.dll"
   File "..\BuildOutput\EveHQ\Release\System.Net.Http.dll"
   File "..\BuildOutput\EveHQ\Release\System.Net.Http.Extensions.dll"
   File "..\BuildOutput\EveHQ\Release\System.Net.Http.Primitives.dll"

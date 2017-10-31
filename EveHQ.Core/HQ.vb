@@ -104,7 +104,6 @@ Public Class HQ
     Private Shared _marketOrderDataProvider As IMarketOrderDataProvider
     Private Shared ReadOnly MarketCacheProcessorMinTime As DateTime = DateTime.Now.AddHours(-1)
     Private Shared marketDataReceivers As IEnumerable(Of IMarketDataReceiver)
-    Private Shared _marketCacheUploader As MarketUploader
     Private Shared _tickerItemList As New List(Of Integer)
     Private Shared _loggingStream As Stream
     Private Shared _eveHqTracer As EveHQTraceLogger
@@ -113,7 +112,7 @@ Public Class HQ
     Private Shared _updateLocation As String
     Private Shared _plugins As Dictionary(Of String, EveHQPlugIn)
     Private Shared _eveCentralProvider As EveCentralMarketDataProvider
-    Private Shared _eveHqProvider As EveHQMarketDataProvider
+    Private Shared _eveHqProvider As IMarketStatDataProvider
 
 
     Shared Sub New()
@@ -163,34 +162,20 @@ Public Class HQ
         Get
             If _marketStatDataProvider Is Nothing Then
                 ' Initialize based on settings
-                'If (Settings.MarketDataProvider = EveCentralMarketDataProvider.Name) Then
-                _marketStatDataProvider = GetEveCentralMarketInstance()
-                'Else
-                '_marketStatDataProvider = GetEveHqMarketInstance()
-                'End If
+                If (Settings.MarketDataProvider = EveCentralMarketDataProvider.Name) Then
+					_marketStatDataProvider = GetEveCentralMarketInstance()
+                Else
+					_marketStatDataProvider = GetFuzzworkMarketStatDataProvider()
+                End If
             End If
             Return _marketStatDataProvider
         End Get
-        Set(value As IMarketStatDataProvider)
+        Set
             _marketStatDataProvider = value
         End Set
     End Property
 
-    Public Shared Property MarketCacheUploader As MarketUploader
-        Get
-            If _marketCacheUploader Is Nothing Then
-                marketDataReceivers = {CType(GetEveCentralMarketInstance(), IMarketDataReceiver), New EveMarketDataRelayProvider(New HttpRequestProvider(HQ.ProxyDetails))}
-                _marketCacheUploader = New MarketUploader(MarketCacheProcessorMinTime, marketDataReceivers, Nothing)
-            End If
-
-            Return _marketCacheUploader
-        End Get
-        Set(value As MarketUploader)
-            _marketCacheUploader = value
-        End Set
-    End Property
-
-    Public Shared Property TickerItemList As List(Of Integer)
+	Public Shared Property TickerItemList As List(Of Integer)
         Get
             If (_tickerItemList.Count = 0) Then
                 'Add place holder mineral types only
@@ -210,17 +195,16 @@ Public Class HQ
         End Set
     End Property
 
-    Public Shared Property MarketOrderDataProvider As IMarketOrderDataProvider
+    Public Shared ReadOnly Property MarketOrderDataProvider As IMarketOrderDataProvider
         Get
-            If _marketOrderDataProvider Is Nothing Then
-                _marketOrderDataProvider = GetEveCentralMarketInstance()
+	        If (Settings.MarketDataProvider = EveCentralMarketDataProvider.Name) Then
+                _marketOrderDataProvider =  GetEveCentralMarketInstance()
+			Else
+				_marketOrderDataProvider =  new StabMarketOrderDataProvider()
             End If
             Return _marketOrderDataProvider
         End Get
-        Set(value As IMarketOrderDataProvider)
-            _marketOrderDataProvider = value
-        End Set
-    End Property
+	End Property
 
     Public Shared Property LoggingStream As Stream
         Get
@@ -344,18 +328,18 @@ Public Class HQ
         Return _eveCentralProvider
     End Function
 
-
-    Public Shared Function GetEveHqMarketInstance() As EveHQMarketDataProvider
+	Public Shared Function GetFuzzworkMarketStatDataProvider() As IMarketStatDataProvider
         If _eveHqProvider Is Nothing Then
             If (Settings.ProxyRequired) Then
-                _eveHqProvider = New EveHQMarketDataProvider(Path.Combine(AppDataFolder, "MarketCache\EveHq"), New HttpRequestProvider(ProxyDetails))
+                _eveHqProvider = New FuzzworkMarketStatDataProvider(
+					Path.Combine(AppDataFolder, "MarketCache\Fuzzwork"), New HttpRequestProvider(ProxyDetails))
             Else
-                _eveHqProvider = New EveHQMarketDataProvider(Path.Combine(AppDataFolder, "MarketCache\EveHq"), New HttpRequestProvider(ProxyDetails))
+                _eveHqProvider = New FuzzworkMarketStatDataProvider(
+					Path.Combine(AppDataFolder, "MarketCache\Fuzzwork"), New HttpRequestProvider(Nothing))
             End If
         End If
         Return _eveHqProvider
-    End Function
-
+	End Function
 End Class
 
 Class ListViewItemComparerA

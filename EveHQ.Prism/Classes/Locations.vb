@@ -135,7 +135,7 @@ Namespace Classes
 					structureNameTask.Wait()
 					isStructureNameGotten = structureNameTask.Result.IsSuccess
 				Catch exception As Exception
-					_isStructureNameServiceAbailable = Not WebServiceExceptionHelper.IsServiceUnabailableError(exception)
+					_isStructureNameServiceAbailable = Not WebServiceExceptionHelper.IsServiceUnavailableError(exception)
 					HQ.WriteLogEvent($"During call to structure name service an exception occured:\n {exception.ToString()}")
 				End Try
 			End If

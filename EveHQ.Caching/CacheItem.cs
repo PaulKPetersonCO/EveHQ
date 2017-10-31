@@ -49,34 +49,32 @@
 // 
 // ==============================================================================
 
+#region Usings
+
+using System;
+
+#endregion
+
+
 namespace EveHQ.Caching
 {
-    /// <summary>Data entity for an item stored with a file cache.</summary>
-    /// <typeparam name="T">Type of the data</typeparam>
-    using System;
+	/// <summary>Data entity for an item stored with a file cache.</summary>
+	/// <typeparam name="T">Type of the data</typeparam>
+	public sealed class CacheItem<T>
+	{
+		/// <summary>
+		///     Gets or sets the cache expiry time.
+		/// </summary>
+		public DateTimeOffset CacheUntil { private get; set; }
 
-    public sealed class CacheItem<T>
-    {
-        #region Public Properties
+		/// <summary>
+		///     Gets or sets the data being cached.
+		/// </summary>
+		public T Data { get; set; }
 
-        /// <summary>
-        ///     Gets or sets the cache expiry time.
-        /// </summary>
-        public DateTimeOffset CacheUntil { get; set; }
-
-        /// <summary>
-        ///     Gets or sets the data being cached.
-        /// </summary>
-        public T Data { get; set; }
-
-        /// <summary>
-        ///     Gets a value indicating whether this data is dirty and should be refreshed.
-        /// </summary>
-        public bool IsDirty
-        {
-            get { return DateTimeOffset.Now > CacheUntil; }
-        }
-
-        #endregion
-    }
+		/// <summary>
+		///     Gets a value indicating whether this data is dirty and should be refreshed.
+		/// </summary>
+		public bool IsDirty => DateTimeOffset.Now > CacheUntil;
+	}
 }

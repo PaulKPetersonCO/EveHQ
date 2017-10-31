@@ -581,7 +581,7 @@ Public Class EveHQSettings
     End Property
     Public Property MarketUseRegionMarket As Boolean
     Public Property MarketDefaultMetric As MarketMetric
-    Public Property MarketDataUploadEnabled As Boolean
+
     Public Property MarketStatOverrides As Dictionary(Of Integer, ItemMarketOverride)
         Get
             If (_marketStatOverrides Is Nothing) Then

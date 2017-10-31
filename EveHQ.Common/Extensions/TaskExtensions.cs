@@ -49,82 +49,81 @@
 // 
 // ==============================================================================
 
+#region Usings
+
+using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+
+#endregion
+
+
 namespace EveHQ.Common.Extensions
 {
-    /// <summary>
-    ///     TODO: Update summary.
-    /// </summary>
-    using System;
-    using System.Diagnostics;
-    using System.Threading.Tasks;
+	public static class TaskExtensions
+	{
+		/// <summary>Attempts to run the task, and captures any failures to the trace log</summary>
+		/// <param name="factory">The factory.</param>
+		/// <param name="action">The action.</param>
+		/// <returns>The <see cref="Task" />.</returns>
+		public static Task TryRun(this TaskFactory factory, Action action)
+		{
+			if (factory != null)
+			{
+				return factory.StartNew(action).ContinueWith(t => VerifyTaskCompletedSuccessFully(t));
+			}
 
-    public static class TaskExtensions
-    {
-        #region Public Methods and Operators
+			return null;
+		}
 
-        /// <summary>Attempts to run the task, and captures any failures to the trace log</summary>
-        /// <param name="factory">The factory.</param>
-        /// <param name="action">The action.</param>
-        /// <returns>The <see cref="Task" />.</returns>
-        public static Task TryRun(this TaskFactory factory, Action action)
-        {
-            if (factory != null)
-            {
-                return factory.StartNew(action).ContinueWith(t => VerifyTaskCompletedSuccessFully(t));
-            }
+		/// <summary>Attempts to run the task, and captures any failures to the trace log</summary>
+		/// <param name="factory">The factory.</param>
+		/// <param name="action">The action.</param>
+		/// <typeparam name="T">The result type of the task</typeparam>
+		/// <returns>The <see cref="Task" />.</returns>
+		public static Task<T> TryRun<T>(this TaskFactory<T> factory, Func<T> action)
+		{
+			if (factory != null)
+			{
+				return factory.StartNew(action).ContinueWith(t => VerifyTaskCompletedSuccessFully(t));
+			}
 
-            return null;
-        }
+			return null;
+		}
 
-        /// <summary>Attempts to run the task, and captures any failures to the trace log</summary>
-        /// <param name="factory">The factory.</param>
-        /// <param name="action">The action.</param>
-        /// <typeparam name="T">The result type of the task</typeparam>
-        /// <returns>The <see cref="Task" />.</returns>
-        public static Task<T> TryRun<T>(this TaskFactory<T> factory, Func<T> action)
-        {
-            if (factory != null)
-            {
-                return factory.StartNew(action).ContinueWith(t => VerifyTaskCompletedSuccessFully(t));
-            }
+		public static bool IsTaskSuccessfullyCompleted<T>(this Task<T> task) where T: class => 
+			task.IsCompleted && task.Result != null && !task.IsCanceled && !task.IsFaulted && task.Exception == null;
 
-            return null;
-        }
+		/// <summary>The verify task completed success fully.</summary>
+		/// <param name="task">The task.</param>
+		/// <returns>The <see cref="Task" />.</returns>
+		private static Task VerifyTaskCompletedSuccessFully(Task task)
+		{
+			if (task.IsFaulted &&
+				task.Exception != null)
+			{
+				Trace.TraceError(task.Exception.FormatException());
+				Trace.Flush();
+			}
 
-        #endregion
+			return task;
+		}
 
-        #region Methods
+		/// <summary>The verify task completed success fully.</summary>
+		/// <param name="task">The task.</param>
+		/// <typeparam name="T">the type of task result</typeparam>
+		/// <returns>The <see cref="T" />.</returns>
+		private static T VerifyTaskCompletedSuccessFully<T>(Task<T> task)
+		{
+			if (task.IsFaulted &&
+				task.Exception != null)
+			{
+				Trace.TraceError(task.Exception.FormatException());
+				Trace.Flush();
+				return default(T);
+			}
 
-        /// <summary>The verify task completed success fully.</summary>
-        /// <param name="task">The task.</param>
-        /// <returns>The <see cref="Task" />.</returns>
-        private static Task VerifyTaskCompletedSuccessFully(Task task)
-        {
-            if (task.IsFaulted && task.Exception != null)
-            {
-                Trace.TraceError(task.Exception.FormatException());
-                Trace.Flush();
-            }
-
-            return task;
-        }
-
-        /// <summary>The verify task completed success fully.</summary>
-        /// <param name="task">The task.</param>
-        /// <typeparam name="T">the type of task result</typeparam>
-        /// <returns>The <see cref="T" />.</returns>
-        private static T VerifyTaskCompletedSuccessFully<T>(Task<T> task)
-        {
-            if (task.IsFaulted && task.Exception != null)
-            {
-                Trace.TraceError(task.Exception.FormatException());
-                Trace.Flush();
-                return default(T);
-            }
-
-            return task.Result;
-        }
-
-        #endregion
-    }
+			return task.Result;
+		}
+	}
 }

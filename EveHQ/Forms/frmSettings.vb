@@ -2164,21 +2164,17 @@ Namespace Forms
 
             ' Clear the list of providers before we add items
             _marketDataProvider.Items.Clear()
-            '_marketDataProvider.Items.Add(EveHQMarketDataProvider.Name)
+            _marketDataProvider.Items.Add(FuzzworkMarketStatDataProvider.Name)
             _marketDataProvider.Items.Add(EveCentralMarketDataProvider.Name)
 
 
             ' Set selected to the current setting.
             _marketDataProvider.SelectedItem = HQ.MarketStatDataProvider.ProviderName
-
-            enableMarketDataUpload.Checked = HQ.Settings.MarketDataUploadEnabled
         End Sub
 
         Private Sub UpdateDefaultMetrics()
 
             Select Case HQ.Settings.MarketDefaultTransactionType
-                Case MarketTransactionKind.All
-                    _defaultAll.Checked = True
                 Case MarketTransactionKind.Buy
                     _defaultBuy.Checked = True
                 Case Else
@@ -2325,9 +2321,7 @@ Namespace Forms
                 HQ.Settings.MarketDefaultMetric = MarketMetric.Percentile
             End If
 
-            If (_defaultAll.Checked) Then
-                HQ.Settings.MarketDefaultTransactionType = MarketTransactionKind.All
-            ElseIf _defaultBuy.Checked Then
+            If (_defaultBuy.Checked) Then
                 HQ.Settings.MarketDefaultTransactionType = MarketTransactionKind.Buy
             Else
                 HQ.Settings.MarketDefaultTransactionType = MarketTransactionKind.Sell
@@ -2355,13 +2349,6 @@ Namespace Forms
                         Next
                     Next
                 End If
-            End If
-            HQ.Settings.MarketDataUploadEnabled = enableMarketDataUpload.Checked
-
-            If HQ.Settings.MarketDataUploadEnabled = True Then
-                HQ.MarketCacheUploader.Start()
-            Else
-                HQ.MarketCacheUploader.Stop() ' It should be stopped already, but never hurts to set it so again.
             End If
         End Sub
 
@@ -2573,7 +2560,7 @@ Namespace Forms
             If providerName = EveCentralMarketDataProvider.Name Then
                 HQ.MarketStatDataProvider = HQ.GetEveCentralMarketInstance
             Else
-                HQ.MarketStatDataProvider = HQ.GetEveHqMarketInstance
+                HQ.MarketStatDataProvider = HQ.GetFuzzworkMarketStatDataProvider
             End If
         End Sub
 

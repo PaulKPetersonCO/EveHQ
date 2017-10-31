@@ -49,30 +49,28 @@
 // 
 // ==============================================================================
 
+#region Usings
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+#endregion
+
+
 namespace EveHQ.Market
 {
-    /// <summary>
-    ///     Defines the functional contract for retrieving current market order results.
-    /// </summary>
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-
-    public interface IMarketOrderDataProvider
-    {
-        #region Public Methods and Operators
-
-        /// <summary>The get market orders for item type.</summary>
-        /// <param name="itemTypeId">The item type id.</param>
-        /// <param name="includedRegions">The included regions.</param>
-        /// <param name="systemId">The system id.</param>
-        /// <param name="minQuantity">The min quantity.</param>
-        /// <returns>The <see cref="Task" />.</returns>
-        Task<ItemMarketOrders> GetMarketOrdersForItemType(
-            int itemTypeId, 
-            IEnumerable<int> includedRegions,
-            int? systemId, 
-            int minQuantity);
-
-        #endregion
-    }
+	/// <summary>
+	///     Defines the functional contract for retrieving current market order results.
+	/// </summary>
+	public interface IMarketOrderDataProvider
+	{
+		/// <remarks>
+		/// <param name="includedRegions" /> allways contains at most one region.
+		/// </remarks>>
+		Task<ItemMarketOrders> GetMarketOrdersForItemType(
+			int itemTypeId,
+			IEnumerable<int> includedRegions,
+			int? systemId,
+			int minQuantity);
+	}
 }

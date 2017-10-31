@@ -49,169 +49,97 @@
 // 
 // ==============================================================================
 
+#region Usings
+
+using System;
+using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
+using EveHQ.Common.Extensions;
+using Newtonsoft.Json;
+
+#endregion
+
+
 namespace EveHQ.Caching
 {
-    /// <summary>
-    ///     A simple caching system that uses text files for persistence.
-    /// </summary>
-    using System;
-    using System.Collections.Concurrent;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
-    using System.IO;
-    using System.Text;
-    using EveHQ.Common.Extensions;
-    using Newtonsoft.Json;
+	/// <summary>
+	/// A simple caching system that uses text files for persistence.
+	/// </summary>
+	public sealed class TextFileCacheProvider : ICacheProvider
+	{
+		public TextFileCacheProvider(string rootPath)
+		{
+			_rootPath = rootPath;
+			if (!Directory.Exists(_rootPath))
+			{
+				Directory.CreateDirectory(_rootPath);
+			}
+		}
 
-    public class TextFileCacheProvider : ICacheProvider
-    {
-        #region Constants
+		public void Add<T>(string key, T value, DateTimeOffset cacheUntil)
+		{
+			var cacheitem = new CacheItem<T> { CacheUntil = cacheUntil, Data = value };
 
-        /// <summary>
-        ///     Cache file naming format.
-        /// </summary>
-        private const string CacheFileFormat = "{0}.json.txt";
+			_memCache[key] = cacheitem;
+			SaveToFile(key, cacheitem);
+		}
 
-        #endregion
+		public CacheItem<T> Get<T>(string key)
+		{
+			if (_memCache.TryGetValue(key, out object item))
+			{
+				return item as CacheItem<T>;
+			}
 
-        #region Fields
+			// not in memory, check disk
+			item = GetFromDisk<T>(key);
 
-        /// <summary>
-        ///     In memory copy of cache
-        /// </summary>
-        private readonly ConcurrentDictionary<string, object> _memCache = new ConcurrentDictionary<string, object>();
+			if (item == null)
+			{
+				return null; // data didn't exist in cache.
+			}
 
-        /// <summary>
-        ///     root path of the current cache instance.
-        /// </summary>
-        private readonly string _rootPath;
+			_memCache[key] = item;
+			return (CacheItem<T>)item;
+		}
 
-        #endregion
+		private CacheItem<T> GetFromDisk<T>(string key)
+		{
+			var fullPath = CreateCacheFilePath(key);
 
-        #region Constructors and Destructors
+			if (!File.Exists(fullPath))
+			{
+				return null; // the file doesn't exist, therefore there's no cache.
+			}
 
-        /// <summary>Initializes a new instance of the TextFileCacheProvider class.</summary>
-        /// <param name="rootPath">Root path of the cache instance.</param>
-        public TextFileCacheProvider(string rootPath)
-        {
-            _rootPath = rootPath;
-        }
+			using (var streamReader = new StreamReader(new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+			{
+				return JsonConvert.DeserializeObject<CacheItem<T>>(streamReader.ReadToEnd());
+			}
+		}
 
-        #endregion
+		private void SaveToFile<T>(string key, CacheItem<T> cacheitem)
+		{
+			try
+			{
+				using (var stream = new FileStream(CreateCacheFilePath(key), FileMode.Create, FileAccess.Write, FileShare.Read))
+				{
+					var dataBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(cacheitem));
+					stream.Write(dataBytes, 0, dataBytes.Length);
+				}
+			}
+			catch (Exception e)
+			{
+				// supress the exception since we have the data in memory, but log the occurance
+				Trace.TraceWarning(e.FormatException());
+			}
+		}
 
-        #region Public Methods and Operators
+		private string CreateCacheFilePath(string key) => Path.Combine(_rootPath, $"{key}.json.txt");
 
-        /// <summary>Adds an item to the cache.</summary>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        /// <param name="cacheUntil">The cache Until.</param>
-        /// <typeparam name="T">Type to Cache</typeparam>
-        public void Add<T>(string key, T value, DateTimeOffset cacheUntil)
-        {
-            var cacheitem = new CacheItem<T> { CacheUntil = cacheUntil, Data = value };
-
-            _memCache[key] = cacheitem;
-            SaveToFile(key, cacheitem);
-        }
-
-        /// <summary>Gets an item from cache.</summary>
-        /// <param name="key">The key.</param>
-        /// <typeparam name="T">Tye to get from cache</typeparam>
-        /// <returns>The <see cref="CacheItem" />.</returns>
-        public CacheItem<T> Get<T>(string key)
-        {
-            CacheItem<T> result = null;
-
-            object item;
-
-            if (!_memCache.TryGetValue(key, out item))
-            {
-                // not in memory, check disk
-                item = GetFromDisk<T>(key);
-
-                if (item == null)
-                {
-                    return result; // data didn't exist in cache.
-                }
-
-                _memCache[key] = item;
-            }
-
-            var cacheItem = item as CacheItem<T>;
-
-            result = cacheItem;
-
-            return result;
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>Gets cached data from physical disk</summary>
-        /// <typeparam name="T">Data type to return</typeparam>
-        /// <param name="key">Key to look for on disk</param>
-        /// <returns>The cache item</returns>
-        [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times",
-            Justification =
-                "The disposal may appear to be happening twice, but it doesn't. Without the 2 using clauses, FXcop also complains about not disposing an object before losing scope.")]
-        private CacheItem<T> GetFromDisk<T>(string key)
-        {
-            string fileName = string.Format(CultureInfo.InvariantCulture, CacheFileFormat, key);
-
-            string fullPath = Path.Combine(_rootPath, fileName);
-
-            if (!File.Exists(fullPath))
-            {
-                return null; // the file doesn't exist, therefore there's no cache.
-            }
-
-            CacheItem<T> result;
-            using (var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var streamReader = new StreamReader(stream))
-            {
-                string data = streamReader.ReadToEnd();
-
-                result = JsonConvert.DeserializeObject<CacheItem<T>>(data);
-            }
-
-            return result;
-        }
-
-        /// <summary>Saves the cache item to disk</summary>
-        /// <typeparam name="T">Type of data</typeparam>
-        /// <param name="key">name of the cache item</param>
-        /// <param name="cacheitem">data to cache</param>
-        private void SaveToFile<T>(string key, CacheItem<T> cacheitem)
-        {
-            string stringData = JsonConvert.SerializeObject(cacheitem);
-
-            string fileName = string.Format(CultureInfo.InvariantCulture, CacheFileFormat, key);
-
-            if (!Directory.Exists(_rootPath))
-            {
-                Directory.CreateDirectory(_rootPath);
-            }
-
-            string fullPath = Path.Combine(_rootPath, fileName);
-
-            try
-            {
-                using (var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.Read))
-                {
-                    byte[] dataBytes = Encoding.UTF8.GetBytes(stringData);
-                    stream.Write(dataBytes, 0, dataBytes.Length);
-                    stream.Flush();
-                }
-            }
-            catch (Exception e)
-            {
-                // supress the exception since we have the data in memory, but log the occurance
-                Trace.TraceWarning(e.FormatException());
-            }
-        }
-
-        #endregion
-    }
+		private readonly ConcurrentDictionary<string, object> _memCache = new ConcurrentDictionary<string, object>();
+		private readonly string _rootPath;
+	}
 }

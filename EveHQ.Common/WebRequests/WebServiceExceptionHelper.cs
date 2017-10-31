@@ -16,7 +16,7 @@ namespace EveHQ.Common
 {
 	public static class WebServiceExceptionHelper
 	{
-		public static bool IsServiceUnabailableError(Exception exception)
+		public static bool IsServiceUnavailableError(Exception exception)
 		{
 			var aggregateException1 = exception as AggregateException;
 			var aggregateException2 = aggregateException1?.InnerException as AggregateException;

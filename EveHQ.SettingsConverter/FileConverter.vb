@@ -455,11 +455,10 @@ Public Class FileConverter
                     _newSettings.QColumns(i, j) = oldSettings.QColumns(i, j)
                 Next
             Next
-            _newSettings.MarketRegions = oldSettings.MarketRegions
+            _newSettings.MarketRegions = new List(Of Integer)(oldSettings.MarketRegions.First())
             _newSettings.MarketSystem = oldSettings.MarketSystem
             _newSettings.MarketUseRegionMarket = oldSettings.MarketUseRegionMarket
             _newSettings.MarketDefaultMetric = oldSettings.MarketDefaultMetric
-            _newSettings.MarketDataUploadEnabled = oldSettings.MarketDataUploadEnabled
             _newSettings.MarketStatOverrides = oldSettings.MarketStatOverrides
             _newSettings.MarketDefaultTransactionType = oldSettings.MarketDefaultTransactionType
         Catch e As Exception
