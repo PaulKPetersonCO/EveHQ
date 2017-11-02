@@ -2501,7 +2501,7 @@
 22444,1,23950,2473,1,42529;43555,0,1,0,3,15,Shield Command Burst Stength
 22444,1,23950,2537,1,42529;43555,0,1,0,3,15,Shield Command Burst Stength
 # Stabber,,,,,,,,,,,
-622,1,3333,10013,4,575;578,0,1,0,-5,15,Medium Projectile Turret ROF
+622,1,3333,10013,4,575;578,0,1,0,-7.5,15,Medium Projectile Turret ROF
 622,1,3333,158,4,575;578,0,1,0,10,15,Medium Projectile Turret Falloff
 # Stabber Krusual Edition,,,,,,,,,,,
 #33649,1,3333,10013,4,575;578,0,1,0,-5,15,Medium Projectile Turret ROF
@@ -3115,3 +3115,96 @@
 44995,0,3335,10014,4,568;572,0,1,0,5,15,Medium Energy Turret Damage
 44995,0,3335,54,4,568;572,0,1,1,10,15,Medium Energy Turret Optimal Range
 44995,0,0,50,2,330,0,0,0,-100,15,Cloaking Device CPU
+
+# Komodo ,,,,,,,,,,,
+45649,1,3344,117,2,476;1677;1019;1678;89;657,0,1,0,50,15,Citadel Torpedo, Torpedo & Citadel Cruise Missile Kinetic Damage
+45649,1,3344,114,2,476;1677;1019;1678;89;657,0,1,0,40,15,Citadel Torpedo, Torpedo & Citadel Cruise Missile EM Damage
+45649,1,3344,116,2,476;1677;1019;1678;89;657,0,1,0,40,15,Citadel Torpedo, Torpedo & Citadel Cruise explosive Damage
+45649,1,3344,118,2,476;1677;1019;1678;89;657,0,1,0,40,15,Citadel Torpedo, Torpedo & Citadel Cruise thermal Damage
+45649,1,3344,10009,1,45649,0,1,1,6,15,Warp Core Strength
+45649,1,3346,271,1,45649,0,1,2,-4,15,Shield EM Resistance
+45649,1,3346,272,1,45649,0,1,2,-4,15,Shield Explosive Resistance
+45649,1,3346,273,1,45649,0,1,2,-4,15,Shield Kinetic Resistance
+45649,1,3346,274,1,45649,0,1,2,-4,15,Shield Thermal Resistance
+45649,1,3346,51,2,524;1673;1674,0,1,0,15,15,XL Cruise Missile Launchers, XL Torpedo Launchers and Rapid Torpedo Launchers ROF
+45649,1,3346,10009,1,45649,0,1,1,6,15,Warp Core Strength
+45649,0,0,2131,3,87,0,0,0,100,15,Fighter Attack Missile EM Damage
+45649,0,0,2132,3,87,0,0,0,100,15,Fighter Attack Missile Thermal Damage
+45649,0,0,2133,3,87,0,0,0,100,15,Fighter Attack Missile Kinetic Damage
+45649,0,0,2134,3,87,0,0,0,100,15,Fighter Attack Missile Explosive Damage
+45649,0,0,2227,3,87,0,0,0,100,15,Fighter Ability EM Damage
+45649,0,0,2228,3,87,0,0,0,100,15,Fighter Ability Thermal Damage
+45649,0,0,2229,3,87,0,0,0,100,15,Fighter Ability Kinetic Damage
+45649,0,0,2230,3,87,0,0,0,100,15,Fighter Ability Explosive Damage
+45649,0,0,263,3,87,0,0,0,100,15,Fighter Shield HP
+45649,0,0,265,3,87,0,0,0,100,15,Fighter Armor HP
+45649,0,0,9,3,87,0,0,0,100,15,Fighter Hull HP
+45649,0,0,10063,1,45649,0,0,1,2,15,Command Burst Modules
+45649,0,0,54,1,42529;43555;42527;43554;42526;43552;42530;43556,0,0,0,200,15,Command Burst AoE Range Bonus
+45649,0,0,1159,2,329,0,0,0,500,15,Armor HP - Plates
+45649,0,0,72,2,38,0,0,0,500,15,Shield HP - Extenders
+45649,0,0,37,2,89,0,0,0,100,15,Torpedo Velocity
+45649,0,0,2112,1,45649,0,0,0,80,15,Sensor Dampener resistance
+45649,0,0,2113,1,45649,0,0,0,80,15,Weapon Disruption resistance
+45649,0,0,2115,1,45649,0,0,0,80,15,Stasis effect resistance
+45649,0,0,2135,1,45649,0,0,0,80,15,Remote Electronic Assistance impedance
+45649,0,0,73,2,1313,0,0,0,500,15,Entosis link duration
+
+# Caiman,,,,,,,,,,,
+45647,1,20530,271,1,45647,0,1,2,-4,15,Shield EM Resistance
+45647,1,20530,272,1,45647,0,1,2,-4,15,Shield Explosive Resistance
+45647,1,20530,273,1,45647,0,1,2,-4,15,Shield Kinetic Resistance
+45647,1,20530,274,1,45647,0,1,2,-4,15,Shield Thermal Resistance
+45647,1,20531,117,2,476;1677;1019;1678;89;657,0,1,0,5,15,Citadel Torpedo, Torpedo & Citadel Cruise Missile Kinetic Damage
+45647,1,20531,118,2,476;1677;1019;1678;89;657,0,1,0,5,15,Citadel Torpedo, Torpedo & Citadel Cruise thermal Damage
+45647,0,0,2131,3,87,0,0,0,100,15,Fighter Attack Missile EM Damage
+45647,0,0,2132,3,87,0,0,0,100,15,Fighter Attack Missile Thermal Damage
+45647,0,0,2133,3,87,0,0,0,100,15,Fighter Attack Missile Kinetic Damage
+45647,0,0,2134,3,87,0,0,0,100,15,Fighter Attack Missile Explosive Damage
+45647,0,0,2227,3,87,0,0,0,100,15,Fighter Ability EM Damage
+45647,0,0,2228,3,87,0,0,0,100,15,Fighter Ability Thermal Damage
+45647,0,0,2229,3,87,0,0,0,100,15,Fighter Ability Kinetic Damage
+45647,0,0,2230,3,87,0,0,0,100,15,Fighter Ability Explosive Damage
+45647,0,0,263,3,87,0,0,0,100,15,Fighter Shield HP
+45647,0,0,265,3,87,0,0,0,100,15,Fighter Armor HP
+45647,0,0,9,3,87,0,0,0,100,15,Fighter Hull HP
+45647,0,0,73,2,1313,0,0,0,500,15,Entosis link duration
+
+# Loggerhead,,,,,,,,,,,
+45645,1,24312,271,1,45645,0,1,2,-4,15,Shield EM Resistance
+45645,1,24312,272,1,45645,0,1,2,-4,15,Shield Explosive Resistance
+45645,1,24312,273,1,45645,0,1,2,-4,15,Shield Kinetic Resistance
+45645,1,24312,274,1,45645,0,1,2,-4,15,Shield Thermal Resistance
+45645,1,24313,68,2,41;1697,0,1,0,5,15,Remote Shield Booster Rep Amount
+45645,0,0,10063,1,45645,0,0,1,1,15,Command Burst Modules
+45645,0,0,50,1,42529;43555;42527;43554;42526;43552;42530;43556,0,0,0,-50,15,Command Burst CPU Reduction
+45645,0,0,54,1,42529;43555;42527;43554;42526;43552;42530;43556,0,0,0,200,15,Command Burst AoE Range Bonus
+45645,0,0,68,4,842,0,0,0,1000,15,Shield Maintenance Bot Transfer
+45645,0,0,84,4,842,0,0,0,1000,15,Armor Maintenance Bot Transfer
+45645,0,0,263,4,842,0,0,0,1000,15,Fighter Shield HP
+45645,0,0,265,4,842,0,0,0,1000,15,Fighter Armor HP
+45645,0,0,9,4,842,0,0,0,1000,15,Fighter Hull HP
+45645,0,0,73,2,1313,0,0,0,500,15,Entosis link duration
+
+# Marshal,,,,,,,,,,,
+44996,1,28656,54,2,52,0,1,0,10,15,Warp Disruptor Range
+44996,1,28656,54,2,65,0,1,0,20,15,Stasis Web Range
+44996,1,28656,1281,1,44996,0,1,0,10,15,Warp Speed
+44996,1,28656,306,2,330,0,1,9,125,8,Cloaked Velocity Bonus
+44996,1,3336,10015,4,563;566,0,1,0,5,15,Large Hybrid Turret Damage
+44996,1,3336,160,4,563;566,0,1,0,7.5,15,Large Hybrid Turret Tracking
+44996,1,3337,10013,4,576;579,0,1,0,-5,15,Large Projectile Turret ROF
+44996,1,3337,158,4,576;579,0,1,0,10,15,Large Projectile Turret Falloff
+44996,1,3338,51,2,506;508;1245,0,1,0,-5,15,"Rapid Heavy, Cruise & Torpedo Launcher ROF"
+44996,1,3338,37,2,656;657;386;89;396,0,1,0,10,15,Cruise & Torpedo Velocity
+44996,1,3339,10014,4,569;573,0,1,0,5,15,Large Energy Turret Damage
+44996,1,3339,54,4,569;573,0,1,0,10,15,Large Energy Turret Optimal Range
+44996,0,0,560,2,330,0,0,0,-100,15,Sensor Recalibration Time Bonus
+
+# Tatara ,,,,,,,,,,,
+35836,0,0,2109,2,1322,0,0,0,25,15,service module fuel consumption
+35836,0,0,2110,2,1322,0,0,0,25,15,service module fuel consumption
+
+# Athanor ,,,,,,,,,,,
+35835,0,0,2109,2,1322,0,0,0,25,15,service module fuel consumption
+35835,0,0,2110,2,1322,0,0,0,25,15,service module fuel consumption
