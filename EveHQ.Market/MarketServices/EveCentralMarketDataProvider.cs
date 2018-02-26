@@ -466,7 +466,7 @@ namespace EveHQ.Market.MarketServices
                 let stationId = order.Element("station").Value.ToInt32()
                 let stationName = order.Element("station_name").Value
                 let security = order.Element("security").Value.ToDouble()
-                let range = order.Element("range").Value.ToInt32()
+                let range = order.Element("range").Value
                 let price = order.Element("price").Value.ToDouble()
                 let quantityRemaining = order.Element("vol_remain").Value.ToInt32()
                 let minQuantity = order.Element("min_volume").Value.ToInt32()
@@ -477,7 +477,7 @@ namespace EveHQ.Market.MarketServices
                     {
                         OrderId = orderId,
                         RegionId = regionId,
-                        StationId = stationId,
+                        LocationId = stationId,
                         StationName = stationName,
                         Security = security,
                         OrderRange = range,

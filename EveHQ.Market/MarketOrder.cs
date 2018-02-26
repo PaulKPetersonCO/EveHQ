@@ -88,7 +88,7 @@ namespace EveHQ.Market
         public long OrderId { get; set; }
 
         /// <summary>Gets or sets the order range.</summary>
-        public int OrderRange { get; set; }
+        public string OrderRange { get; set; }
 
         /// <summary>Gets or sets the price.</summary>
         public double Price { get; set; }
@@ -109,7 +109,7 @@ namespace EveHQ.Market
         public int SolarSystemId { get; set; }
 
         /// <summary>Gets or sets the station id.</summary>
-        public int StationId { get; set; }
+        public long LocationId { get; set; }
 
         /// <summary>Gets or sets the station name.</summary>
         public string StationName { get; set; }

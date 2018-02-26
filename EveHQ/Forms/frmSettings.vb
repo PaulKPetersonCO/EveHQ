@@ -2164,11 +2164,12 @@ Namespace Forms
 
             ' Clear the list of providers before we add items
             _marketDataProvider.Items.Clear()
-            _marketDataProvider.Items.Add(FuzzworkMarketStatDataProvider.Name)
-            _marketDataProvider.Items.Add(EveCentralMarketDataProvider.Name)
+	        _marketDataProvider.Items.Add(CcpMarketDataProvider.Name)
+	        _marketDataProvider.Items.Add(FuzzworkMarketStatDataProvider.Name)
+	        _marketDataProvider.Items.Add(EveCentralMarketDataProvider.Name)
 
 
-            ' Set selected to the current setting.
+	        ' Set selected to the current setting.
             _marketDataProvider.SelectedItem = HQ.MarketStatDataProvider.ProviderName
         End Sub
 
@@ -2559,8 +2560,10 @@ Namespace Forms
         Private Sub ChangeMarketProvider(ByVal providerName As String)
             If providerName = EveCentralMarketDataProvider.Name Then
                 HQ.MarketStatDataProvider = HQ.GetEveCentralMarketInstance
-            Else
+            Else If providerName = FuzzworkMarketStatDataProvider.Name
                 HQ.MarketStatDataProvider = HQ.GetFuzzworkMarketStatDataProvider
+			Else
+                HQ.MarketStatDataProvider = HQ.GetCcpMarketStatDataProvider
             End If
         End Sub
 

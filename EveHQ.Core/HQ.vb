@@ -113,10 +113,11 @@ Public Class HQ
     Private Shared _plugins As Dictionary(Of String, EveHQPlugIn)
     Private Shared _eveCentralProvider As EveCentralMarketDataProvider
     Private Shared _eveHqProvider As IMarketStatDataProvider
+	Private Shared _ccpMarketDataProvider As CcpMarketDataProvider
+	Private Shared _locations As Locations
 
 
-    Shared Sub New()
-
+	Shared Sub New()
     End Sub
 
     Public Shared Property Settings As New EveHQSettings
@@ -164,8 +165,10 @@ Public Class HQ
                 ' Initialize based on settings
                 If (Settings.MarketDataProvider = EveCentralMarketDataProvider.Name) Then
 					_marketStatDataProvider = GetEveCentralMarketInstance()
-                Else
+                Else If (Settings.MarketDataProvider = FuzzworkMarketStatDataProvider.Name)
 					_marketStatDataProvider = GetFuzzworkMarketStatDataProvider()
+				Else 
+					_marketStatDataProvider = GetCcpMarketStatDataProvider()
                 End If
             End If
             Return _marketStatDataProvider
@@ -199,6 +202,8 @@ Public Class HQ
         Get
 	        If (Settings.MarketDataProvider = EveCentralMarketDataProvider.Name) Then
                 _marketOrderDataProvider =  GetEveCentralMarketInstance()
+			Else If (Settings.MarketDataProvider = CcpMarketDataProvider.Name)
+				_marketOrderDataProvider =  GetCcpMarketStatDataProvider()
 			Else
 				_marketOrderDataProvider =  new StabMarketOrderDataProvider()
             End If
@@ -269,6 +274,17 @@ Public Class HQ
         End Get
     End Property
 
+    Public Shared ReadOnly Property Locations As Locations
+        Get
+            If _locations Is Nothing Then
+	            _locations = new Locations(ApiProvider.StructureName, AddressOf WriteLogEvent)
+            End If
+            Return _locations
+        End Get
+    End Property
+
+
+
     Public Shared Property TempPilots As SortedList(Of String, EveHQPilot)
         Get
             Return tempPilots1
@@ -332,13 +348,25 @@ Public Class HQ
         If _eveHqProvider Is Nothing Then
             If (Settings.ProxyRequired) Then
                 _eveHqProvider = New FuzzworkMarketStatDataProvider(
-					Path.Combine(AppDataFolder, "MarketCache\Fuzzwork"), New HttpRequestProvider(ProxyDetails))
+					Path.Combine(AppDataFolder, "MarketCache\Fuzzwork"), New HttpRequestProvider(ProxyDetails), New SupportedMarket())
             Else
                 _eveHqProvider = New FuzzworkMarketStatDataProvider(
-					Path.Combine(AppDataFolder, "MarketCache\Fuzzwork"), New HttpRequestProvider(Nothing))
+					Path.Combine(AppDataFolder, "MarketCache\Fuzzwork"), New HttpRequestProvider(Nothing), New SupportedMarket())
             End If
         End If
         Return _eveHqProvider
+	End Function
+	Public Shared Function GetCcpMarketStatDataProvider() As CcpMarketDataProvider
+        If _eveHqProvider Is Nothing Then
+            If (Settings.ProxyRequired) Then
+	            _ccpMarketDataProvider = New CcpMarketDataProvider(
+					Path.Combine(AppDataFolder, "MarketCache\Ccp"), New HttpRequestProvider(ProxyDetails), New SupportedMarket(), Locations)
+            Else
+	            _ccpMarketDataProvider = New CcpMarketDataProvider(
+					Path.Combine(AppDataFolder, "MarketCache\Ccp"), New HttpRequestProvider(Nothing), New SupportedMarket(), Locations)
+            End If
+        End If
+        Return _ccpMarketDataProvider
 	End Function
 End Class
 

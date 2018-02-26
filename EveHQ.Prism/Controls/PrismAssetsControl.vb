@@ -645,7 +645,7 @@ Namespace Controls
 										End If
 									Next
 
-									Dim assetLocation = Locations.GetLocationFromID(assetItem.LocationId)
+									Dim assetLocation = HQ.Locations.GetLocationFromID(assetItem.LocationId)
 									If addLocation = True Then
 										locNode.Text = assetLocation.ContainerName
 										locNode.Tag = assetLocation.ContainerId

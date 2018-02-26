@@ -124,7 +124,7 @@ Namespace Forms
 
 #End Region
 
-#Region "Form Initialisation Routines"
+		#Region "Form Initialisation Routines"
 
         Private Sub frmPrism_Load(ByVal sender As Object, ByVal e As EventArgs) Handles MyBase.Load
 
@@ -4038,7 +4038,7 @@ Namespace Forms
                         If blueprint.LocationID Is Nothing Then blueprint.LocationID = "0" ' Resets details
                         If StaticData.Blueprints.ContainsKey(CInt(blueprint.TypeID)) Then
                             bpData = StaticData.Blueprints(CInt(blueprint.TypeID))
-                            locationName = Locations.GetLocationFromID(CLng(blueprint.LocationID)).ContainerName
+                            locationName = HQ.Locations.GetLocationFromID(CLng(blueprint.LocationID)).ContainerName
                             If locationName <> "" AndAlso _bpLocations.Contains(locationName) = False Then
                                 _bpLocations.Add(locationName)
                             End If
@@ -4481,7 +4481,7 @@ Namespace Forms
                     Dim locationName As String
                     For Each selitem As Node In adtBlueprints.SelectedNodes
                         bpAsset = PlugInData.BlueprintAssets(bpForm.OwnerName).Item(CLng(selitem.Tag))
-                        locationName = Locations.GetLocationFromID(CLng(bpAsset.LocationID)).ContainerName
+                        locationName = HQ.Locations.GetLocationFromID(CLng(bpAsset.LocationID)).ContainerName
                         Call UpdateOwnerBpItem(bpForm.OwnerName, locationName, bpAsset, selitem)
                     Next
                 Else

@@ -70,12 +70,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>EveHQ.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevComponents.DotNetBar2" />
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -125,6 +119,7 @@
     <Compile Include="AccountClient.cs" />
     <Compile Include="ApiKeyType.cs" />
     <Compile Include="ApiConstants.cs" />
+    <Compile Include="AssetLocation.cs" />
     <Compile Include="CharacterClient.cs" />
     <Compile Include="CorpClient.cs" />
     <Compile Include="Entities\Account.cs" />
@@ -186,6 +181,7 @@
     <Compile Include="EveServiceResponse.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="CorpCharBaseClient.cs" />
+    <Compile Include="Locations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponseMode.cs" />
     <Compile Include="ServerClient.cs" />

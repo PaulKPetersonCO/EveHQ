@@ -36,7 +36,7 @@ VIAddVersionKey "ProductName" "EveHQ Setup"
 !ifdef Version
 VIProductVersion ${Version}
 !else
-VIProductVersion 2.31.10.0
+VIProductVersion 2.31.11.0
 !endif
 
 
@@ -137,6 +137,7 @@ SectionIn RO
   File "..\BuildOutput\EveHQ\Release\System.Net.Http.WebRequest.dll"
   File "..\BuildOutput\EveHQ\Release\System.Runtime.dll"
   File "..\BuildOutput\EveHQ\Release\System.Threading.Tasks.dll"
+  File "..\BuildOutput\EveHQ\Release\MathNet.Numerics.dll"
   File "..\EveHQ\License.txt"
 
   SetOutPath $INSTDIR\x64

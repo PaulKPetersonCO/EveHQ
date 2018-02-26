@@ -39,12 +39,6 @@
     <CodeAnalysisRuleSet>..\Ref\FxCop\EveHQ.ruleset</CodeAnalysisRuleSet>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\EveHQ.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevComponents.DotNetBar2" />
     <Reference Include="System" />
@@ -111,9 +105,6 @@
     <Compile Include="WebRequests\WebServiceExceptionHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\EveHQ.snk">
-      <Link>EveHQ.snk</Link>
-    </None>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
